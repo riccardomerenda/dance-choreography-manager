@@ -1,0 +1,6 @@
+@DanceChoreographyManager.Services.Authentication_HostAddress = http://localhost:5037
+
+GET {{DanceChoreographyManager.Services.Authentication_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
