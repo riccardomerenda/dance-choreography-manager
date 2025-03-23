@@ -15,15 +15,15 @@
 - [Project Status](#-project-status)
 - [Quick Start Guide](#-quick-start-guide)
 - [Common Use Cases](#-common-use-cases)
-- [Architecture](#-architecture)
-- [Technical Stack](#-technical-stack)
+- [Architecture](#architecture)
+- [Technical Stack](#technical-stack)
 - [Development](#-development)
-  - [Prerequisites](#-prerequisites)
-  - [Installation](#-installation)
-  - [Test Procedures](#-test-procedures)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Test Procedures](#test-procedures)
 - [Services Overview](#-services-overview)
 - [Troubleshooting](#-troubleshooting)
-- [Technologies Used](#-technologies-used)
+- [Technologies Used](#technologies-used)
 - [Contributing](#-contributing)
 - [License](#-license)
 - [Contact](#-contact)
@@ -122,7 +122,7 @@ Example workflow:
 <!-- TODO: Add a screenshot of an example choreography here when available -->
 > **Note:** Example choreography screenshots will be added as the application development progresses.
 
-## 🏗️ Architecture
+## Architecture
 
 Dance Choreography Manager implements a modern microservices architecture built on .NET Aspire, designed for scalability, resilience, and maintainability.
 
@@ -190,7 +190,7 @@ The architecture implements two primary communication patterns:
 
 This hybrid approach ensures responsive user experiences while maintaining service independence and resilience.
 
-## 🛠️ Technical Stack
+## Technical Stack
 
 - **Frontend**: React 18+ with TypeScript and Tailwind CSS
 - **Backend**: .NET 8 Aspire for cloud-native service orchestration
@@ -297,7 +297,7 @@ We recommend using:
 - Verify database credentials in configuration
 - Ensure database schema migrations have been applied
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - **.NET Aspire** - Cloud-ready stack for building observable, production-ready distributed applications
 - **React** - Frontend JavaScript library for building user interfaces
