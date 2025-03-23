@@ -32,7 +32,7 @@
 
 Dance Choreography Manager is a comprehensive application designed to help dance teachers create, manage, and visualize choreographies, dancers, and formations. Built with a modern microservices architecture, this tool brings together the power of AI assistance and intuitive visual design to revolutionize the dance choreography process.
 
-> **Note:** Application screenshots will be added as the interface is finalized. This banner is a placeholder.
+> **Note:** Application screenshots will be added as the interface is finalized.
 
 ## ✨ Key Features
 
