@@ -9,24 +9,24 @@
 [![ML.NET](https://img.shields.io/badge/ML.NET-512BD4?style=flat&logo=microsoft&logoColor=white)](https://dotnet.microsoft.com/apps/machinelearning-ai/ml-dotnet)
 [![Status](https://img.shields.io/badge/Status-In%20Development-orange)]()
 
-## 📑 Table of Contents
-- [📋 Overview](#overview)
-- [✨ Key Features](#key-features)
-- [📈 Project Status](#project-status)
-- [🚀 Quick Start Guide](#quick-start-guide)
-- [💡 Common Use Cases](#common-use-cases)
-- [🏗️ Architecture](#architecture)
-- [🛠️ Technical Stack](#technical-stack)
-- [💻 Development](#development)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Test Procedures](#test-procedures)
-- [🧩 Services Overview](#services-overview)
-- [❓ Troubleshooting](#troubleshooting)
-- [🛠️ Technologies Used](#technologies-used)
-- [👥 Contributing](#contributing)
-- [📝 License](#license)
-- [📞 Contact](#contact)
+## Table of Contents
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Project Status](#-project-status)
+- [Quick Start Guide](#-quick-start-guide)
+- [Common Use Cases](#-common-use-cases)
+- [Architecture](#-architecture)
+- [Technical Stack](#-technical-stack)
+- [Development](#-development)
+  - [Prerequisites](#-prerequisites)
+  - [Installation](#-installation)
+  - [Test Procedures](#-test-procedures)
+- [Services Overview](#-services-overview)
+- [Troubleshooting](#-troubleshooting)
+- [Technologies Used](#-technologies-used)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Contact](#-contact)
 
 ## 📋 Overview
 
@@ -340,4 +340,4 @@ Email: [riccardomerenda@gmail.com](mailto:riccardomerenda@gmail.com)
 
 ---
 
-<p align="center">Made with ❤️ for dancers and choreographers everywhere</p>
+<p align="center">Made with ❤️ for dancers and choreographers everywhere</p># 💃 Dance Choreography Manager 🕺
