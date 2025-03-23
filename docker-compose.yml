@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  # PostgreSQL database for Authentication service
+  auth-db:
+    image: postgres:14-alpine
+    container_name: dcm-auth-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=authdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # PostgreSQL database for Dancer service (for future use)
+  dancer-db:
+    image: postgres:14-alpine
+    container_name: dcm-dancer-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=dancerdb
+    ports:
+      - "5433:5432"
+    volumes:
+      - dancer-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # PostgreSQL database for Course service (for future use)
+  course-db:
+    image: postgres:14-alpine
+    container_name: dcm-course-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=coursedb
+    ports:
+      - "5434:5432"
+    volumes:
+      - course-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # RabbitMQ for service-to-service communication
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: dcm-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Seq for centralized structured logging
+  seq:
+    image: datalust/seq:latest
+    container_name: dcm-seq
+    ports:
+      - "5341:80"
+    environment:
+      - ACCEPT_EULA=Y
+    volumes:
+      - seq-data:/data
+
+volumes:
+  auth-db-data:
+  dancer-db-data:
+  course-db-data:
+  rabbitmq-data:
+  seq-data:
