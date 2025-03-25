@@ -9,31 +9,27 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
+    - name: Check out repository
+      uses: actions/checkout@v3
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 8.0.x
-        
+        dotnet-version: '8.0.x'
+
     - name: Restore dependencies
       run: dotnet restore
-      
+
     - name: Build
-      run: dotnet build --no-restore --configuration Release
-      
+      run: dotnet build --configuration Release
+
     - name: Test
       run: dotnet test --no-build --verbosity normal --configuration Release
-      
+
     - name: Upload build artifacts
-      if: success()
       uses: actions/upload-artifact@v3
       with:
         name: build-artifacts
-        path: |
-          **/bin/Release/net8.0/
-          !**/bin/Release/net8.0/ref/
-        if-no-files-found: error
-        retention-days: 7
+        path: '**/bin/Release/net8.0'
