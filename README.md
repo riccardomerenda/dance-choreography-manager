@@ -58,7 +58,7 @@ The project is currently in active development (Alpha v0.0.1).
 |---------|--------|----------------------|
 | User Authentication | 🚧 In Progress | April 2025 |
 | Dancer Profiles | 🚧 In Progress | April 2025 |
-| Basic Formation Editor | ✅ Complete | May 2025 |
+| Basic Formation Editor | 🚧 In Progress | May 2025 |
 | Course Management | 🚧 In Progress | May 2025 |
 | AI Recommendations | 🚧 In Progress | June 2025 |
 | Transition Animations | 📅 Planned | July 2025 |
@@ -337,7 +337,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 Project Website: (Coming Soon)
 GitHub Repository: [github.com/riccardomerenda/dance-choreography-manager](https://github.com/riccardomerenda/dance-choreography-manager)
 Email: [riccardomerenda@gmail.com](mailto:riccardomerenda@gmail.com)
-
----
-
-<p align="center">Made with ❤️ for dancers and choreographers everywhere</p># 💃 Dance Choreography Manager 🕺
