@@ -46,7 +46,7 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: .
-        file: ./Services/Authentication/Dockerfile
+        file: ./src/Services/Authentication/Dockerfile
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ steps.meta-auth.outputs.tags }}
         labels: ${{ steps.meta-auth.outputs.labels }}

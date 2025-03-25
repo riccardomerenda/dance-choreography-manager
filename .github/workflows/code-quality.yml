@@ -27,6 +27,7 @@ jobs:
       run: |
         dotnet nuget locals all --clear
         dotnet workload install aspire --skip-manifest-update
+        dotnet workload update
         dotnet workload list
     
     - name: Restore dependencies
