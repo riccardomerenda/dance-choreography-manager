@@ -39,10 +39,10 @@ public static class StringExtensions
 
         // Remove special characters
         slug = Regex.Replace(slug, @"[^a-z0-9\s-]", string.Empty);
-        
+
         // Remove consecutive hyphens
         slug = Regex.Replace(slug, @"-+", "-");
-        
+
         // Trim hyphens from start and end
         slug = slug.Trim('-');
 
@@ -58,20 +58,20 @@ public static class StringExtensions
     /// <returns>Truncated string</returns>
     public static string Truncate(this string value, int maxLength, bool addEllipsis = true)
     {
-        if (string.IsNullOrEmpty(value)) 
+        if (string.IsNullOrEmpty(value))
             return string.Empty;
-        
-        if (value.Length <= maxLength) 
+
+        if (value.Length <= maxLength)
             return value;
-        
+
         var truncatedValue = value[..maxLength].TrimEnd();
-        
+
         if (addEllipsis)
             truncatedValue += "...";
-        
+
         return truncatedValue;
     }
-    
+
     /// <summary>
     /// Checks if a string is a valid email address
     /// </summary>

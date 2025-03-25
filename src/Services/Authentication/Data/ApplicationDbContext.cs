@@ -10,11 +10,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         : base(options)
     {
     }
-    
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        
+
         // Configure table names with a prefix to avoid conflicts
         foreach (var entity in builder.Model.GetEntityTypes())
         {
@@ -24,7 +24,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 entity.SetTableName($"Auth_{tableName}");
             }
         }
-        
+
         // Add any additional configurations here
     }
 }

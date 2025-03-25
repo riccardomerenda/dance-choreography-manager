@@ -28,11 +28,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequireUppercase = true;
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequiredLength = 8;
-    
+
     // Lockout settings
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
     options.Lockout.MaxFailedAccessAttempts = 5;
-    
+
     // User settings
     options.User.RequireUniqueEmail = true;
 })
@@ -71,12 +71,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { 
-        Title = "Dance Choreography Manager - Authentication API", 
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Dance Choreography Manager - Authentication API",
         Version = "v1",
         Description = "API for user authentication and profile management"
     });
-    
+
     // Configure Swagger to use JWT authentication
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -86,7 +87,7 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
-    
+
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -114,7 +115,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    
+
     // Apply migrations in development
     using (var scope = app.Services.CreateScope())
     {
