@@ -19,6 +19,11 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
+    - name: Install .NET Aspire workload
+      run: |
+        dotnet workload install aspire
+        dotnet workload restore
+
     - name: Restore dependencies
       run: dotnet restore
 
@@ -29,7 +34,7 @@ jobs:
       run: dotnet test --no-build --verbosity normal --configuration Release
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v3.1.0
       with:
         name: build-artifacts
         path: '**/bin/Release/net8.0'
