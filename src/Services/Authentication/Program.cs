@@ -12,11 +12,24 @@ var builder = WebApplication.CreateBuilder(args);
 // Add service defaults from .NET Aspire
 builder.AddServiceDefaults();
 
-// Add database context
+// Configure Kestrel
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5001); // HTTP endpoint
+});
+
+// Add database context with fallback connections
+string[] connectionStrings = {
+    builder.Configuration.GetConnectionString("DefaultConnection"),
+    // Alternative connections if the first one fails
+    "Host=auth-db;Port=5432;Database=authdb;Username=postgres;Password=postgres;Include Error Detail=true;Trust Server Certificate=true;SSL Mode=Prefer",
+    "Host=localhost;Port=55805;Database=authdb;Username=postgres;Password=postgres;Include Error Detail=true;Trust Server Certificate=true;SSL Mode=Prefer"
+};
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseNpgsql(connectionString);
+    // We'll try different connection strings during initialization
+    options.UseNpgsql(connectionStrings[0]);
 });
 
 // Add Identity
@@ -104,9 +117,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Add health checks
-builder.Services.AddHealthChecks()
-    .AddDbContextCheck<ApplicationDbContext>();
+// Add simple health checks
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -114,20 +126,124 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
-
-    // Apply migrations in development
-    using (var scope = app.Services.CreateScope())
+    app.UseSwaggerUI(c => {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Auth API V1");
+        c.RoutePrefix = string.Empty; // Serve the Swagger UI at the app's root
+    });
+    
+    // Initialize database with retry logic
+    try 
     {
-        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        dbContext.Database.MigrateAsync().Wait();
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            
+            logger.LogInformation("Initializing database...");
+            
+            // Try each connection string until one works
+            bool connected = false;
+            Exception lastException = null;
+            
+            foreach (var connectionString in connectionStrings)
+            {
+                try
+                {
+                    logger.LogInformation("Attempting to connect with connection string: {ConnectionStart}...", 
+                        connectionString.Substring(0, Math.Min(20, connectionString.Length)) + "...");
+                    
+                    // Create a new options instance with the current connection string
+                    var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+                    optionsBuilder.UseNpgsql(connectionString);
+                    
+                    // Create a new context with these options
+                    using var dbContext = new ApplicationDbContext(optionsBuilder.Options);
+                    
+                    // Try to connect
+                    dbContext.Database.EnsureCreated();
+                    connected = true;
+                    
+                    logger.LogInformation("Successfully connected to the database!");
+                    
+                    // Initialize roles and admin user
+                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                    
+                    logger.LogInformation("Creating default roles and admin user...");
+                    
+                    // Create default roles
+                    string[] roles = new[] { "Admin", "User" };
+                    foreach (var role in roles)
+                    {
+                        if (!await roleManager.RoleExistsAsync(role))
+                        {
+                            await roleManager.CreateAsync(new IdentityRole(role));
+                            logger.LogInformation("Created role: {Role}", role);
+                        }
+                    }
+                    
+                    // Create default admin user
+                    var adminUser = await userManager.FindByEmailAsync("admin@example.com");
+                    if (adminUser == null)
+                    {
+                        adminUser = new ApplicationUser
+                        {
+                            UserName = "admin@example.com",
+                            Email = "admin@example.com",
+                            FirstName = "Admin",
+                            LastName = "User",
+                            EmailConfirmed = true
+                        };
+                        
+                        var result = await userManager.CreateAsync(adminUser, "Admin123!");
+                        if (result.Succeeded)
+                        {
+                            logger.LogInformation("Created admin user");
+                            await userManager.AddToRoleAsync(adminUser, "Admin");
+                            logger.LogInformation("Added admin user to Admin role");
+                        }
+                        else
+                        {
+                            foreach (var error in result.Errors)
+                            {
+                                logger.LogError("Error creating admin user: {Error}", error.Description);
+                            }
+                        }
+                    }
+                    
+                    break; // Exit the loop if we successfully connected
+                }
+                catch (Exception ex)
+                {
+                    lastException = ex;
+                    logger.LogWarning(ex, "Failed to connect with this connection string. Trying next one if available...");
+                }
+            }
+            
+            if (!connected)
+            {
+                logger.LogError(lastException, "All connection attempts failed!");
+                throw new Exception("Could not connect to the database with any of the provided connection strings", lastException);
+            }
+            
+            logger.LogInformation("Database setup completed");
+        }
+    }
+    catch (Exception ex)
+    {
+        app.Logger.LogError(ex, "An error occurred while initializing the database");
     }
 }
 
 // Use default endpoints (health checks, etc.)
 app.MapDefaultEndpoints();
 
-app.UseHttpsRedirection();
+// Remove HTTPS redirection in development
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

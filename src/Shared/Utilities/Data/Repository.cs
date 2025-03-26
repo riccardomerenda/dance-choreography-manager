@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace DanceChoreographyManager.Shared.Utilities.Data;
 
@@ -99,4 +100,110 @@ public interface IRepository<T> where T : class
     /// <param name="pageSize">Page size</param>
     /// <returns>Paged entities</returns>
     Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(Expression<Func<T, bool>> predicate, int page, int pageSize);
+}
+
+/// <summary>
+/// Generic repository implementation
+/// </summary>
+/// <typeparam name="T">Entity type</typeparam>
+/// <typeparam name="TContext">DbContext type</typeparam>
+public abstract class Repository<T, TContext> : IRepository<T>
+    where T : class
+    where TContext : DbContext
+{
+    protected readonly TContext _context;
+    protected readonly DbSet<T> _dbSet;
+
+    protected Repository(TContext context)
+    {
+        _context = context;
+        _dbSet = context.Set<T>();
+    }
+
+    public virtual async Task<IEnumerable<T>> GetAllAsync()
+    {
+        return await _dbSet.ToListAsync();
+    }
+
+    public virtual async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _dbSet.Where(predicate).ToListAsync();
+    }
+
+    public virtual async Task<T?> GetByIdAsync(Guid id)
+    {
+        return await _dbSet.FindAsync(id);
+    }
+
+    public virtual async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _dbSet.FirstOrDefaultAsync(predicate);
+    }
+
+    public virtual async Task<T> AddAsync(T entity)
+    {
+        var entry = await _dbSet.AddAsync(entity);
+        await _context.SaveChangesAsync();
+        return entry.Entity;
+    }
+
+    public virtual async Task<T> UpdateAsync(T entity)
+    {
+        _dbSet.Update(entity);
+        await _context.SaveChangesAsync();
+        return entity;
+    }
+
+    public virtual async Task DeleteAsync(T entity)
+    {
+        _dbSet.Remove(entity);
+        await _context.SaveChangesAsync();
+    }
+
+    public virtual async Task DeleteAsync(Guid id)
+    {
+        var entity = await GetByIdAsync(id);
+        if (entity != null)
+        {
+            await DeleteAsync(entity);
+        }
+    }
+
+    public virtual async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _dbSet.AnyAsync(predicate);
+    }
+
+    public virtual async Task<int> CountAsync()
+    {
+        return await _dbSet.CountAsync();
+    }
+
+    public virtual async Task<int> CountAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _dbSet.CountAsync(predicate);
+    }
+
+    public virtual async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(int page, int pageSize)
+    {
+        var totalCount = await CountAsync();
+        var items = await _dbSet
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (items, totalCount);
+    }
+
+    public virtual async Task<(IEnumerable<T> Items, int TotalCount)> GetPagedAsync(Expression<Func<T, bool>> predicate, int page, int pageSize)
+    {
+        var query = _dbSet.Where(predicate);
+        var totalCount = await query.CountAsync();
+        var items = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (items, totalCount);
+    }
 }
