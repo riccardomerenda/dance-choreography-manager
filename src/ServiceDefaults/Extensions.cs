@@ -43,15 +43,15 @@ public static class Extensions
             .WithMetrics(metrics =>
             {
                 metrics.AddRuntimeInstrumentation()
-                       .AddAspNetCoreInstrumentation()
-                       .AddHttpClientInstrumentation()
-                       .AddProcessInstrumentation();
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddProcessInstrumentation();
             })
             .WithTracing(tracing =>
             {
                 tracing.AddAspNetCoreInstrumentation()
-                       .AddHttpClientInstrumentation()
-                       .AddEntityFrameworkCoreInstrumentation();
+                    .AddHttpClientInstrumentation()
+                    .AddEntityFrameworkCoreInstrumentation();
             });
 
         return builder;
