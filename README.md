@@ -9,6 +9,13 @@
 [![ML.NET](https://img.shields.io/badge/ML.NET-512BD4?style=flat&logo=microsoft&logoColor=white)](https://dotnet.microsoft.com/apps/machinelearning-ai/ml-dotnet)
 [![Status](https://img.shields.io/badge/Status-In%20Development-orange)]()
 
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/riccardomerenda/dance-choreography-manager/graphs/commit-activity)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://makeapullrequest.com)
+[![GitHub Issues](https://img.shields.io/github/issues/riccardomerenda/dance-choreography-manager)](https://github.com/riccardomerenda/dance-choreography-manager/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/riccardomerenda/dance-choreography-manager)](https://github.com/riccardomerenda/dance-choreography-manager/commits/main)
+[![GitHub Stars](https://img.shields.io/github/stars/riccardomerenda/dance-choreography-manager?style=social)](https://github.com/riccardomerenda/dance-choreography-manager/stargazers)
+[![Version](https://img.shields.io/badge/version-v0.0.1--alpha-orange)](https://github.com/riccardomerenda/dance-choreography-manager/releases)
+
 ## Table of Contents
 - [Overview](#-overview)
 - [Key Features](#-key-features)
